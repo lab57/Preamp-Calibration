@@ -32,7 +32,7 @@ figure(
 ))
 This is generally useful as some types of detectors, for example a PMT, may release a small burst of electrons (comparable to a delta function spike in current), which is much harder to measure than a voltage difference.
 
-This arrangement is generally problematic, as multiple pulses will keep causing an increase to an unbounded size. This can be resolved by adding a bleed resistor
+This circuit arrangement is generally problematic, as multiple pulses will keep causing an increase to an unbounded size. This can be resolved by adding a bleed resistor
 
 #figure(image("bleed.jpg", height: 20%), caption: [More typical circuit digram including the bleed resistor $R_f$])
 
