@@ -9,9 +9,15 @@
   ),
   date: datetime.today().display("[month repr:long] [day], [year]"),
 )
+
+#show link: underline
+
 #set heading(numbering: "1.1")
 #outline()
 #pagebreak()
+
+
+
 = Charge Sensitive Preamplifier
 
 == Function & Purpose
@@ -61,29 +67,33 @@ The shaping time is defined as the time-equivalent of the "standard deviation" o
 #figure(image("DS0053.png", height: 40%), caption: [View from oscilliscope, with same color coorrespondance as before. The view is zoomed in to make the signal of the shaper clear])<osc-zoomed>
 
 
-== Modification and Calibration
-The shaper has it's own gain that can be adjusted with controls on the front of the device. There is a fine gain along with two switches that can be toggled. Per the specification document, each switch adds a gain of a factor of 10 (this will in the future be confirmed with measurements). 
+== Calibration
+The shaper has it's own gain that can be adjusted with controls on the front of the device. There is a fine gain along with two switches that can be toggled. Per the specification document, each switch adds a gain of a factor of 10. This gain factor was measured and at worst found to be 9.94.
 
 #figure(
   image("0.2.png", width: 60%),
   caption: [Typical fit to a shaper signal. $A = 0.197 plus.minus .0001 "V ", sigma =52 "ns"$]
 )
 $ f(x) = A e^(-1/2 (x - mu)^2/sigma^2 ) + c $
-Since the resulting output signal of the shaper is approximately gaussian, a calibration with uncertainty can be performed by injecting an input charge (calculated with the $C_f$ from the preamp and a square wave as described) and doing a gaussian fit to the output signal and extracting the amplitude $A$.
+Since the resulting output signal of the shaper is approximately gaussian, a calibration with uncertainty can be performed by injecting an input charge (calculated with the $C_f$ from the preamp and a square wave as described) and doing a gaussian fit to the output signal and extracting the amplitude $A$. This is generally an easier way to get good data than calibrating both individually, so each particular "stack" (particular preamp and shaper unit) should be calibrated together. The calibration should be done with the oscilloscope set to 1M$ohm$ impedance since that's the imedance of the digital oscilloscope that will be used for taking data.
 
 
 
 == Jumper Wire
-In the absense of a CR-200X module, as in our case, a jumper wire had to be installed that was previously missing. This was done according to the documentation of the unit.
+In the absense of a CR-200X module, as in our case, a jumper wire had to be installed that was previously missing. This was done according to the documentation of the unit. If a 200X module is added in the future this will need to be removed.
 
 #pagebreak()
 = Calibration Data
+Code used to perform calibration available on Github #link("https://github.com/lab57/Preamp-Calibration")
+
+
+Note that if the fine gain is tweaked on the shaper, this will need to be performed again.
 == Preamp 1 $->$ Shaper 1
 
 #figure(
-  image("./shaper-cal-fit.png", width: 70%),
+  image("../final_fit.png", width: 75%),
   caption: [Fit to the response of the shaper and preamp combination]
 )
 
 This data was taken with preamp-1 and shaper-1, the shaper having both gain switches off. The resulting calibration value is 
-$ (3.85 plus.minus .02)dot 10^12 "V / C" $ Additionally note that this does not take into accounnt the resistance in the wire from the function generator to the preamp, but this is likely a very small effect. The data range taken is over the maximimum possible range, going from the minimum voltage difference of the function generator (50 mV) until the response became no longer linear (\~2V)
+$ 3.85 plus.minus .02 "V/pC" $ Additionally note that this does not take into accounnt the resistance in the wire from the function generator to the preamp, but this is likely a very small effect. The data range taken is over the maximimum possible range, going from the minimum voltage difference of the function generator (50 mV) until the response became no longer linear (\~2V)

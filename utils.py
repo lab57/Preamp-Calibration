@@ -96,3 +96,27 @@ def plotFit(fit: FitInfo, t: list[float], V: list[float]):
     plt.ylabel("Voltage (V)")
     plt.savefig(f"./figs/{fit.A:.2g}.png")
     return
+
+
+def getSlope(
+    inputs: np.ndarray, file_range: tuple, capacitance=1e-12
+) -> tuple[float, float]:
+    """Basically a wrapper for everything in the analysis notebook.
+
+    Args:
+        inputs (np.ndarray): Input in mV
+        file_range (tuple): Number identifier range for files (a, b)
+        capacitance (_type_, optional): Capacitance of test capacitor. Defaults to 1e-12.
+
+    Returns:
+        tuple: (slope, slope error)
+    """
+    results: list[FitInfo] = getFits(file_range)  # file range 1->16
+    inputs = inputs * 1e-3 * capacitance * 1e12  # convert mV into charge (pC)
+    amps = getAmps(results)  # get amplitude values from results
+    amps, amps_std = np.transpose(amps)
+
+    linear = lambda x, m, b: m * x + b
+    p, cov = curve_fit(linear, inputs, amps, sigma=amps_std, p0=(3753861894698.39, 0))
+    linerr = np.sqrt(np.diag(cov))
+    return p[0], linerr[0]
